@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#n#+z#w&1@4zqpoea6%s40sent7f06(z42(-7jwa+$v%&q$9l0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []  #调用端口地址需插入此处，python manage.py runserver 192.168.56.1:5555
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rango'
 ]
 
 MIDDLEWARE = [
