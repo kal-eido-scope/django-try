@@ -1,7 +1,14 @@
 <!DOCTYPE html>
+
+{% load static %}   <! -- 教材用staticfiles，版本不对-->
+
 <html>
     <head>
         <title>Rango</title>
+        <! -- CSS -->
+        <link rel = "stylesheet" href = "{%static "css/base.css"%}">
+        <! -- JS -->
+        <script src = "{%static "js/jquery.js" %}"></script>
     </head>
     <body>
         <h1>Rango says...</h1>
@@ -10,7 +17,9 @@
             <strong>{{ boldmessage }}</strong><br />
         </div>
         <div>
-            <a href="/rango/about/">About</a><br />
+            <a href = "/rango/about/">About</a><br />
+            <img src = "{% static "images/rango.jpg"%}"
+                alt="Picture of Rango" />   <! -- alt指定图片在加载不出时显示内容 -->
         </div>
     </body>
 </html>

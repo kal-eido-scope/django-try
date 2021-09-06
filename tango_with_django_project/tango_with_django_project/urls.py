@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 from rango import views
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index,name = 'index'),
-    path('rango/',include('rango.urls'))    # 此映射把以 rango/ 开头的 URL 交给 rango 应用处理
-]
+    path('rango/',include('rango.urls')),    # 此映射把以 rango/ 开头的 URL 交给 rango 应用处理
+] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
