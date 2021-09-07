@@ -5,6 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',             #设置环境变量
 import django                             #初始化django基础设施
 django.setup()
 from rango.models import Category,Page
+from random import randint
 def populate():
     python_pages = [
         {"title":"Official Python Tutorial",
@@ -34,7 +35,7 @@ def populate():
     for cat,cat_data in cats.items():
         c = add_cat(cat,cat_data["views"],cat_data["likes"])
         for p in cat_data["pages"]:
-            add_page(c,p["title"],p["url"])
+            add_page(c,p["title"],p["url"],randint(1,60))
     for c in Category.objects.all():
         for p in Page.objects.filter(category = c):
             print("- {0} - {1}".format(str(c),str(p)))
