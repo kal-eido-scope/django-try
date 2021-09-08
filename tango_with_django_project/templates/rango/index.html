@@ -16,14 +16,14 @@
             hey there partner! <br />
         </div>
         <div>
-            <h2> Most Liked Pages </h2>
+            <h2> Most Liked Categories </h2>
         </div>
         <div>
         {% if categories %}
         <ul>
             {%for category in categories%}
                 <li>
-                    <a href="/rango/catrgory/{{category.slug}}">{{category.name}}</a>
+                    <a href="/rango/category/{{category.slug}}">{{category.name}}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -49,6 +49,7 @@
         </div>
 
         <div>
+            <a href = "/rango/add_category/">Add a New Category</a><br />
             <a href = "/rango/about/">About</a><br />
             <img src="{%static "images/rango.jpg"%}"
                 alt="Picture of Rango" />   <! -- alt指定图片在加载不出时显示内容 -->

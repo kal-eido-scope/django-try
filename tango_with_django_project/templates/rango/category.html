@@ -9,7 +9,7 @@
     <div>
     {%if category%}
         <hi>
-            {{category.name}}
+            <h1>{{category.name}}<br /></h1>
         </hi>
         {%if pages%}
             <ul>
@@ -27,6 +27,12 @@
     {% else %}
         The specified category does not exist!
     {% endif %}
+    </div>
+    <div>
+    {%if category%}
+        <a href='/rango/category/{{category.slug}}/add_page/'>Add a new page.</a><br />
+    {% endif %}
+        <a href='/rango/'>Index<a><br />
     </div>
 </body>
 </html>
