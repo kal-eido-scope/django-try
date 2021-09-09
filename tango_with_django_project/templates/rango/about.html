@@ -1,15 +1,10 @@
-<!DOCTYPE html>
+{% extends 'rango/base.html' %}
 {% load static %}
-<html>
-    <head>
-    </head>
-    <body>
-        <div>
-            This tutorial has been put together by Jackie.<br />
-        </div>
-        <div>
-            <img src= "{%static "images/rango.jpg"%}">
-            <img src="{{MEDIA_URL}}cat.jpg" />
-        </div>
-    </body>
-<html>
+{% block title_block %}
+    About
+{% endblock  %}
+{% block body_block %}
+    This tutorial has been put together by Jackie.<br />
+    <img src= "{%static "images/rango.jpg"%}">
+    <img src="{{MEDIA_URL}}cat.jpg" />
+{% endblock  %}

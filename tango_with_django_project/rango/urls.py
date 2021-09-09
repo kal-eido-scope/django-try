@@ -1,6 +1,7 @@
 from populate_rango import add_page
 from django.urls import re_path
 from rango import views
+app_name = 'rango'
 urlpatterns = [
     re_path(r'^$',views.index,name = 'index'),
     re_path(r'about/',views.about,name = 'about'),
