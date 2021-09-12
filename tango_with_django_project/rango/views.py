@@ -1,3 +1,5 @@
+from datetime import datetime
+from http.cookies import CookieError
 from io import UnsupportedOperation
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -9,17 +11,25 @@ from django.shortcuts import render,HttpResponse
 from django.conf import settings
 from rango.models import Category,Page, UserProfile
 from rango.forms import CategoryForm, PageForm,UserForm,UserProfileForm
-def index(request):
+def index(request:HttpRequest):
     context_dict = {}
     category_list = Category.objects.order_by('-likes')[:5]
     pages_list = Page.objects.order_by('-views')[:5]
     context_dict['pages'] = pages_list
     context_dict['categories'] = category_list
-    return render(request,'rango/index.html',context=context_dict)
-def about(request):
+    visitor_cookie_handler(request)
+    response = render(request,'rango/index.html',context=context_dict)
+    if request.session.get('visits'):
+        print('visits exist')
+    return response
+def about(request:HttpRequest):
     """content = '<a href="/rango/">Index</a>' 
     return HttpResponse('Rango says here is the about page!'+content)"""
-    context_dict = {'MEDIA_URL':settings.MEDIA_URL}
+    if request.session.has_key('visits'):
+        visits = request.session.get('visits')
+    else:
+        raise CookieError
+    context_dict = {'MEDIA_URL':settings.MEDIA_URL,'visits':visits}
     return render(request,'rango/about.html',context = context_dict)
 def show_category(request,category_name_slug):
     context_dict = {}
@@ -123,4 +133,34 @@ def restricted(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+def get_server_ride(request:HttpRequest,cookie,default_val=None):
+    """读取服务器cookie，并设定不存在时默认值"""
+    val = request.session.get(cookie)
+    if not val:
+        val = default_val
+    return val
+
+def visitor_cookie_handler(request:HttpRequest):   #cookie全是str，注意转换！
+    visits = int(get_server_ride(request,'visits','1')) #读取‘visits’cookie，存在取整，不存在置1
+    last_visit_cookie = get_server_ride(request,'last_visit',str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7],'%Y-%m-%d %H:%M:%S')
+    if (datetime.now()-last_visit_time).seconds > 0:
+        visits += 1
+        request.session['last_visit'] = str(datetime.now())
+    else:
+        request.session['last_visit'] = last_visit_cookie
+    request.session['visits'] = visits
+
+    # 使用服务器cookie
+    # request.session.get('key')检测存在与否
+    # request.session['key']=value设置新cookie
+    # 使用cookie在渲染之前
+    # python manage.py clearsessions 清理会话数据库
+    # settings模块SESSION_EXPIRE_AT_BROWSER_CLOSE变量默认False，持久存储，
+    # settings模块增加SESSION_COOKIE_AGE设定存活期（秒数）
+    # 使用客户端cookie
+    # request.COOKIES.has_key(key)检测存在与否
+    # request.COOKIES['key']调用cookie，注意cookie始终存储字符串
+    # response.set_cookie('key',value)设定或更新cookie
 # Create your views here.
